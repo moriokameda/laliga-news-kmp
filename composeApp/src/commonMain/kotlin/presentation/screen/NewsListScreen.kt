@@ -19,7 +19,9 @@ import theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsListScreen() {
+fun NewsListScreen(
+    onNewsClick: (String) -> Unit = {}
+) {
     val viewModel = remember { NewsListViewModel() }
     val state = viewModel.state
     
@@ -101,7 +103,7 @@ fun NewsListScreen() {
                         NewsItemCard(
                             article = article,
                             onClick = {
-                                // TODO: 詳細画面への遷移（段階3で実装）
+                                onNewsClick(article.id)
                             }
                         )
                     }

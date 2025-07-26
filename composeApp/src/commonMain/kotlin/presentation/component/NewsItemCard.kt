@@ -89,7 +89,7 @@ fun NewsItemCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 
                 Text(
-                    text = article.publishDate,
+                    text = article.publishDateTime.split(" ")[0], // 日付部分のみ表示
                     fontSize = 12.sp,
                     color = Color.Gray
                 )

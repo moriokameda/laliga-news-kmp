@@ -4,6 +4,12 @@ data class NewsArticle(
     val id: String,
     val title: String,
     val summary: String,
-    val imageUrl: String,
-    val publishDate: String
-)
+    val content: String,
+    val imageUrls: List<String>,
+    val publishDateTime: String,
+    val source: String,
+    val originalLanguage: String,
+    val isTranslated: Boolean
+) {
+    val primaryImageUrl: String get() = imageUrls.firstOrNull() ?: ""
+}
