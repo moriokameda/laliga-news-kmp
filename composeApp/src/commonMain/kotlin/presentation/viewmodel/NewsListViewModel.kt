@@ -27,6 +27,9 @@ class NewsListViewModel(
         
         viewModelScope.launch {
             try {
+                // ネットワークエラーのシミュレーション（テスト用）
+                // throw Exception("インターネットに接続できません")
+                
                 val articles = repository.getNewsList()
                 state = state.copy(
                     isLoading = false,
@@ -36,7 +39,7 @@ class NewsListViewModel(
             } catch (e: Exception) {
                 state = state.copy(
                     isLoading = false,
-                    error = e.message ?: "不明なエラーが発生しました"
+                    error = "インターネットに接続できません"
                 )
             }
         }

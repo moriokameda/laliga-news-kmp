@@ -1,10 +1,11 @@
 package data.repository
 
 import data.model.NewsArticle
+import kotlinx.coroutines.delay
 
 class SampleNewsRepository : NewsRepository {
-    override suspend fun getNewsList(): List<NewsArticle> {
-        return listOf(
+    // 記事データをクラスレベルでキャッシュして起動時間を短縮
+    private val cachedArticles = listOf(
             NewsArticle(
                 id = "1",
                 title = "レアル・マドリード、エル・クラシコで圧勝",
@@ -148,5 +149,14 @@ class SampleNewsRepository : NewsRepository {
                 isTranslated = false
             )
         )
+    
+    override suspend fun getNewsList(): List<NewsArticle> {
+        // 実際のネットワーク遅延をシミュレートする場合はコメントアウトを解除
+        // delay(500) // 0.5秒の遅延
+        
+        // 空のデータをテストする場合はコメントアウトを解除
+        // return emptyList()
+        
+        return cachedArticles
     }
 }

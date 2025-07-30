@@ -202,9 +202,8 @@ fun ImageSlideshow(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "画像",
-                        fontSize = 16.sp,
-                        color = Color.DarkGray
+                        text = "⚽",
+                        fontSize = 48.sp
                     )
                 }
             }
@@ -236,9 +235,8 @@ fun ImageSlideshow(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "画像 ${page + 1}",
-                                fontSize = 16.sp,
-                                color = Color.DarkGray
+                                text = "⚽",
+                                fontSize = 48.sp
                             )
                         }
                     }

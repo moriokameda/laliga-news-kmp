@@ -12,7 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import presentation.component.NewsItemCard
+import presentation.component.NetworkErrorView
+import presentation.component.EmptyStateView
 import presentation.viewmodel.NewsListViewModel
 import theme.LaLigaRed
 import theme.White
@@ -58,43 +61,13 @@ fun NewsListScreen(
             }
             
             state.error != null -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = "エラーが発生しました",
-                            fontSize = 16.sp,
-                            color = Color.Red
-                        )
-                        Text(
-                            text = state.error,
-                            fontSize = 14.sp,
-                            color = Color.Gray
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(
-                            onClick = { viewModel.refresh() },
-                            colors = ButtonDefaults.buttonColors(containerColor = LaLigaRed)
-                        ) {
-                            Text("再試行", color = White)
-                        }
-                    }
-                }
+                NetworkErrorView(
+                    onRetry = { viewModel.refresh() }
+                )
             }
             
             state.articles.isEmpty() -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "ニュースがありません",
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
-                }
+                EmptyStateView()
             }
             
             else -> {

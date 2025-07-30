@@ -50,10 +50,10 @@ fun NewsItemCard(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
+                        // サッカーボールアイコン（画像エラー時のフォールバック）
                         Text(
-                            text = "画像",
-                            fontSize = 12.sp,
-                            color = Color.DarkGray
+                            text = "⚽",
+                            fontSize = 32.sp
                         )
                     }
                 }
