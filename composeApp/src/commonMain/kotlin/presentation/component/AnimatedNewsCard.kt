@@ -1,41 +1,62 @@
 package presentation.component
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.model.NewsArticle
-import theme.LaLigaRed
-import theme.DarkGray
-import theme.MediumGray
-import theme.LightGray
+import theme.*
 
 @Composable
-fun NewsItemCard(
+fun AnimatedNewsCard(
     article: NewsArticle,
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.97f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
+    
     Card(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
             .height(120.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .scale(scale)
+            .semantics {
+                contentDescription = "${article.title}。${article.summary}。${article.publishDateTime}に公開"
+            },
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (isPressed) 4.dp else 2.dp
+        ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.dp, LaLigaRed.copy(alpha = 0.3f)),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        interactionSource = interactionSource
     ) {
         Row(
             modifier = Modifier
@@ -43,7 +64,7 @@ fun NewsItemCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // 画像プレースホルダー（現在は色付きのBoxで代用）
+            // 画像プレースホルダー
             Box(
                 modifier = Modifier
                     .size(80.dp)
@@ -58,7 +79,6 @@ fun NewsItemCard(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        // サッカーボールアイコン（画像エラー時のフォールバック）
                         Text(
                             text = "⚽",
                             fontSize = 32.sp

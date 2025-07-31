@@ -13,9 +13,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import presentation.component.NewsItemCard
+import presentation.component.AnimatedNewsCard
 import presentation.component.NetworkErrorView
 import presentation.component.EmptyStateView
+import presentation.component.PullToRefreshBox
+import presentation.component.NewsListSkeleton
 import presentation.viewmodel.NewsListViewModel
 import theme.LaLigaRed
 import theme.White
@@ -51,34 +53,41 @@ fun NewsListScreen(
         
         // メインコンテンツエリア
         when {
-            state.isLoading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(color = LaLigaRed)
-                }
-            }
-            
             state.error != null -> {
                 NetworkErrorView(
                     onRetry = { viewModel.refresh() }
                 )
             }
             
-            state.articles.isEmpty() -> {
+            state.isLoading && state.articles.isEmpty() -> {
+                // 初回ローディング時はスケルトンUI
+                NewsListSkeleton()
+            }
+            
+            state.articles.isEmpty() && !state.isLoading -> {
                 EmptyStateView()
             }
             
             else -> {
-                LazyColumn {
-                    items(state.articles) { article ->
-                        NewsItemCard(
-                            article = article,
-                            onClick = {
-                                onNewsClick(article.id)
-                            }
-                        )
+                PullToRefreshBox(
+                    isRefreshing = state.isLoading && state.articles.isNotEmpty(),
+                    onRefresh = { viewModel.refresh() },
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(
+                            items = state.articles,
+                            key = { article -> article.id }
+                        ) { article ->
+                            AnimatedNewsCard(
+                                article = article,
+                                onClick = {
+                                    onNewsClick(article.id)
+                                }
+                            )
+                        }
                     }
                 }
             }
