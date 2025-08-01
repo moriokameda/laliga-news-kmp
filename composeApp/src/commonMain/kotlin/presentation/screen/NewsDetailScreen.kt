@@ -23,7 +23,10 @@ import androidx.compose.ui.unit.sp
 import data.model.NewsArticle
 import data.repository.SampleNewsRepository
 import theme.LaLigaRed
+import theme.LaLigaOrange
 import theme.White
+import theme.DarkGray
+import theme.MediumGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -257,7 +260,7 @@ fun ImageSlideshow(
                                 .size(8.dp)
                                 .clip(RoundedCornerShape(4.dp))
                                 .background(
-                                    if (index == pagerState.currentPage) LaLigaRed
+                                    if (index == pagerState.currentPage) LaLigaOrange
                                     else Color.LightGray
                                 )
                         )
