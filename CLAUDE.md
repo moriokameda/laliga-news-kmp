@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - シンプルで見やすいUI
 - 動作確認レベルのサンプルアプリ
 
-詳細な要件は[要件定義書](./docs/要件定義書.md)を参照
+詳細な要件は[要件定義書](./docs/requirements/要件定義書.md)を参照
 
 ## アプリの主要機能
 1. **ニュース一覧画面**（最優先）
@@ -50,27 +50,55 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 4. **実装フェーズ**
    - レビュー承認後に実際のコーディングを開始する
    - 段階的に実装し、各段階で動作確認可能にする
+   - [コーディング規約](./docs/development/コーディング規約.md)に従って実装する
 
-### 技術ルール
-1. **コード品質**
-   - Kotlin Multiplatformのベストプラクティスに従う
-   - 共通ロジックはcommonMainに実装
-   - UI部分もCompose Multiplatformで共通化
+### Kotlin Multiplatformベストプラクティス
 
-2. **UI/UX設計**
-   - Material Design 3を基本とする
-   - シンプルで直感的な操作
-   - ローディング状態の表示
-   - エラーハンドリング
+#### DRY原則の実践
+- **共通コードの最大活用**: ビジネスロジック、データモデル、ViewModelはcommonMainに実装
+- **拡張関数の活用**: 共通処理は拡張関数として定義し、再利用性を高める
+- **expect/actualの適切な使用**: プラットフォーム固有の実装が必要な場合のみ使用
 
-3. **アーキテクチャ**
-   - MVVM (Model-View-ViewModel) パターン
-   - Repository パターンでデータ取得を抽象化
-   - 依存性注入（DI）の準備
+```kotlin
+// commonMain - 共通ロジック
+fun List<NewsArticle>.filterByDate(date: LocalDate): List<NewsArticle> {
+    return filter { it.publishedAt.toLocalDate() == date }
+}
 
-4. **テスト**
-   - 動作確認レベルなので必須ではない
-   - 主要な機能の手動テストシナリオを用意
+// プラットフォーム固有の実装はexpect/actualで
+expect fun getPlatformName(): String
+```
+
+#### アーキテクチャパターン
+- **MVVM**: View(Compose) → ViewModel → Repository → DataSource
+- **単方向データフロー**: UI Event → ViewModel → State → UI
+- **Repository パターン**: データソースの抽象化と切り替え可能な設計
+
+#### 非同期処理の統一
+- **Coroutines + Flow**: すべての非同期処理で使用
+- **viewModelScope**: ViewModelでの非同期処理に必須
+- **構造化された並行処理**: 適切なキャンセレーション処理
+
+```kotlin
+viewModelScope.launch {
+    repository.getNews()
+        .onSuccess { /* 成功処理 */ }
+        .onFailure { /* エラー処理 */ }
+}
+```
+
+#### 依存性注入
+- **Koin推奨**: 小〜中規模プロジェクトに最適
+- **モジュール定義**: commonMainで定義、各プラットフォームで初期化
+
+### コード品質基準
+1. **再利用性（DRY）**: 重複コードを排除し、共通化を徹底
+2. **プラットフォーム間の一貫性**: 同じ動作を保証
+3. **パフォーマンス最適化**: LazyColumn、remember、キャッシュ活用
+4. **保守性・可読性**: 明確な命名、適切なコメント
+5. **拡張性**: 将来の機能追加を考慮した設計
+
+詳細は[コーディング規約](./docs/development/コーディング規約.md)を参照
 
 ## Project Overview
 This is a Kotlin Multiplatform project using Compose Multiplatform for both Android and iOS targets. The project was generated using the Kotlin Multiplatform Template (KMT) and supports:

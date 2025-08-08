@@ -2,10 +2,14 @@ package theme
 
 import androidx.compose.ui.graphics.Color
 
-// ラリーガブランドカラー
-val LaLigaRed = Color(0xFFFF0000)      // 赤
-val LaLigaBlue = Color(0xFF0000FF)     // 青  
-val LaLigaYellow = Color(0xFFFFD700)   // 黄色
+// ラリーガ公式ブランドカラー (2025年版)
+val LaLigaRed = Color(0xFFEF3340)      // コーラルレッド（メインカラー）
+val LaLigaOrange = Color(0xFFF18800)   // オレンジ（アクセント）
+val LaLigaYellow = Color(0xFFFFED00)   // イエロー（ハイライト）
+val LaLigaGreen = Color(0xFF009640)    // グリーン
+val LaLigaLightBlue = Color(0xFF0090D7) // ライトブルー（リンク・情報）
+val LaLigaBlue = Color(0xFF004F9F)     // ブルー
+val LaLigaPurple = Color(0xFF951B81)   // パープル
 
 // 基本色
 val White = Color(0xFFFFFFFF)
@@ -19,11 +23,11 @@ val md_theme_light_primary = LaLigaRed
 val md_theme_light_onPrimary = White
 val md_theme_light_primaryContainer = Color(0xFFFFDAD6)
 val md_theme_light_onPrimaryContainer = Color(0xFF410002)
-val md_theme_light_secondary = LaLigaBlue
+val md_theme_light_secondary = LaLigaLightBlue
 val md_theme_light_onSecondary = White
 val md_theme_light_secondaryContainer = Color(0xFFD1E4FF)
 val md_theme_light_onSecondaryContainer = Color(0xFF001D36)
-val md_theme_light_tertiary = LaLigaYellow
+val md_theme_light_tertiary = LaLigaOrange
 val md_theme_light_onTertiary = DarkGray
 val md_theme_light_tertiaryContainer = Color(0xFFFFE082)
 val md_theme_light_onTertiaryContainer = Color(0xFF1A1300)
