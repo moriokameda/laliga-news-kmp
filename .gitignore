@@ -25,3 +25,6 @@ keystore/
 # Environment files
 .env
 .env.local
+
+# Serena cache files
+.serena/cache/
